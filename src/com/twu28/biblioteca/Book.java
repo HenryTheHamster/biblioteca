@@ -13,6 +13,7 @@ public class Book {
 
     private String title;
     private Author author;
+    private boolean isReserved = false;
 
     public Book(String title, Author author) {
         this.title = title;
@@ -25,6 +26,18 @@ public class Book {
 
     public Author getAuthor() {
         return author;
+    }
+
+    public void reserveBook() {
+        isReserved = true;
+    }
+
+    public void cancelReservations() {
+        isReserved = false;
+    }
+
+    public boolean isReserved() {
+        return isReserved;
     }
 
     @Override
