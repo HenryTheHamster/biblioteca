@@ -1,15 +1,17 @@
 package com.twu28.biblioteca;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 /**
  * Created with IntelliJ IDEA.
  * User: Andrew
  * Date: 14/07/12
  * Time: 5:33 PM
- * To change this template use File | Settings | File Templates.
  */
 public class NaiveMain {
+
+    Display console;
 
     private Book[] books = {new Book("Hitchhikers Guide to the Galaxy", new Author("Adams", "Douglas")),
                             new Book("Mogworld", new Author("Chroshaw", "Yahtzee")),
@@ -21,8 +23,11 @@ public class NaiveMain {
                                  "Exit"};
 
     public NaiveMain() throws IOException {
-        Display.println("Welcome to the Bangalore Public Library Biblioteca system.");
 
+        console = new Display(new Scanner(System.in), System.out);
+
+        console.println("Welcome to the Bangalore Public Library Biblioteca system.");
+        displayMainMenu();
 
 
 
@@ -32,7 +37,7 @@ public class NaiveMain {
     public void displayMainMenu() throws IOException {
 
 
-        int choice = Display.getChoiceAnswer("Please select from the following options:", mainMenu);
+        int choice = console.getChoiceAnswer("Please select from the following options:", mainMenu);
 
         switch(choice) {
             case 0:
@@ -43,7 +48,7 @@ public class NaiveMain {
                 break;
             case 2:
                 // Exit
-                Display.println("Goodbye.");
+                console.println("Goodbye.");
                 System.exit(0);
                 break;
         }
@@ -59,31 +64,31 @@ public class NaiveMain {
             options[i] = books[i].toString();
         }
         options[books.length] = "Back";
-        int choice = Display.getChoiceAnswer("Select a book to reserve, or return to the main menu:", mainMenu);
+        int choice = console.getChoiceAnswer("Select a book to reserve, or return to the main menu:", options);
         if(choice == books.length) {
             displayMainMenu();
         } else {
             if(books[choice].isReserved()) {
-                Display.println("Sorry we don't have that book yet");
+                console.println("Sorry we don't have that book yet");
                 displayBookMenu();
             } else {
-                Display.println("Thank You! Enjoy the book.");
+                console.println("Thank You! Enjoy the book.");
                 displayBookMenu();
             }
         }
     }
 
     public void displayLibraryNumberInfo() throws IOException {
-        Display.println("Please talk to librarian");
+        console.println("Please talk to librarian");
         displayMainMenu();
     }
 
     public void showWelcomeMessage() {
-        Display.println("Welcome to the Bangalore Public Library Biblioteca system.");
+        console.println("Welcome to the Bangalore Public Library Biblioteca system.");
     }
 
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws IOException {
+        NaiveMain main = new NaiveMain();
     }
 
 }
