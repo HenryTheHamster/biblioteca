@@ -1,5 +1,6 @@
 package com.twu28.biblioteca;
 
+import com.twu28.biblioteca.io.TestSpecificInputStream;
 import com.twu28.biblioteca.io.TestSpecificOutputStream;
 import org.junit.Test;
 
@@ -21,7 +22,8 @@ public class BibliotecaTests {
     public void shouldDisplayWelcomeMessage() {
 
         TestSpecificOutputStream out = new TestSpecificOutputStream();
-        Biblioteca biblioteca = new Biblioteca(out);
+        TestSpecificInputStream in = new TestSpecificInputStream();
+        Biblioteca biblioteca = new Biblioteca(in, out);
 
 
         biblioteca.displayWelcomeMessage();
@@ -32,5 +34,25 @@ public class BibliotecaTests {
         assertEquals(expectedOutput, out.getOutput());
 
     }
+
+    @Test
+    public void shouldDisplayMenuOptions() {
+
+        TestSpecificOutputStream out = new TestSpecificOutputStream();
+        TestSpecificInputStream in = new TestSpecificInputStream();
+        Biblioteca biblioteca = new Biblioteca(in, out);
+
+        biblioteca.displayMainMenu();
+
+        List<String> expectedOutput = new ArrayList<String>();
+        expectedOutput.add("Please select from the following options:");
+        expectedOutput.add("[1] List all books");
+        expectedOutput.add("[2] Reserve a book");
+        expectedOutput.add("[3] Check library number");
+        expectedOutput.add("[4] Exit");
+
+        assertEquals(expectedOutput, out.getOutput());
+    }
+
 
 }

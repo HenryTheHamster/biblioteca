@@ -1,7 +1,5 @@
 package com.twu28.biblioteca.io;
 
-import com.twu28.biblioteca.CustomOutputStream;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,4 +21,6 @@ public class TestSpecificOutputStream implements CustomOutputStream {
     public void println(String message) {
         output.add(message);
     }
+
+
 }
