@@ -4,6 +4,7 @@ import com.twu28.biblioteca.io.CustomInputStream;
 import com.twu28.biblioteca.io.CustomOutputStream;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -55,4 +56,11 @@ public class Biblioteca {
         }
     }
 
+    public void displayBookMenu(List<Book> books) {
+
+        for(Book b : books) {
+            out.println(b.getTitle() + " by " + b.getAuthor());
+        }
+
+    }
 }

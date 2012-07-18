@@ -96,6 +96,26 @@ public class BibliotecaTests {
 
     }
 
+    @Test
+    public void shouldDisplayListOfBooks() {
+        TestSpecificOutputStream out = new TestSpecificOutputStream();
+        TestSpecificInputStream in = new TestSpecificInputStream();
+        Biblioteca biblioteca = new Biblioteca(in, out);
+
+        List<Book> books = new ArrayList<Book>();
+        books.add(new Book("The Agile Samurai", "Jonathan Rasmusson"));
+        books.add(new Book("Head First Java", "Kathy Sierra and Bert Bates"));
+
+        biblioteca.displayBookMenu(books);
+
+        List<String> expectedOutput = new ArrayList<String>();
+        expectedOutput.add("The Agile Samurai by Jonathan Rasmusson");
+        expectedOutput.add("Head First Java by Kathy Sierra and Bert Bates");
+
+        assertEquals(expectedOutput, out.getOutput());
+
+    }
+
 
 
 }
