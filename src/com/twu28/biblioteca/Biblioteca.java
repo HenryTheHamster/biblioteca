@@ -3,6 +3,8 @@ package com.twu28.biblioteca;
 import com.twu28.biblioteca.io.CustomInputStream;
 import com.twu28.biblioteca.io.CustomOutputStream;
 
+import java.io.IOException;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Andrew
@@ -32,6 +34,24 @@ public class Biblioteca {
         out.println("Please select from the following options:");
         for(int i = 0; i < mainMenuOptions.length; i++) {
             out.println("[" + (i+1) + "] " + mainMenuOptions[i]);
+        }
+    }
+
+    public int getUserIntInput(int lower, int upper) throws IOException {
+
+        while(true) {
+            String inputString = in.readLine();
+            try {
+                int inputInt = Integer.parseInt(inputString);
+                if(inputInt >= lower && inputInt <= upper) {
+                    return inputInt;
+                } else {
+                    out.println("Select a valid option!!");
+                }
+            } catch (NumberFormatException e) {
+                // not a valid integer
+                out.println("Select a valid option!!");
+            }
         }
     }
 

@@ -1,5 +1,8 @@
 package com.twu28.biblioteca.io;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Andrew
@@ -8,14 +11,14 @@ package com.twu28.biblioteca.io;
  */
 public class TestSpecificInputStream implements CustomInputStream {
 
-    private String inputValue = "";
+    private Queue<String> inputQueue = new LinkedList<String>();
 
-    public void setInput(String input) {
-        inputValue = input;
+    public void addInput(String input) {
+        inputQueue.add(input);
     }
 
     @Override
     public String readLine() {
-        return inputValue;
+        return inputQueue.poll();
     }
 }

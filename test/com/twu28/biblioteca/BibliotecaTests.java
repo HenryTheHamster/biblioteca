@@ -4,6 +4,7 @@ import com.twu28.biblioteca.io.TestSpecificInputStream;
 import com.twu28.biblioteca.io.TestSpecificOutputStream;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +54,48 @@ public class BibliotecaTests {
 
         assertEquals(expectedOutput, out.getOutput());
     }
+
+    @Test
+    public void shouldAcceptValidIntSelection() {
+        TestSpecificOutputStream out = new TestSpecificOutputStream();
+        TestSpecificInputStream in = new TestSpecificInputStream();
+        Biblioteca biblioteca = new Biblioteca(in, out);
+
+        in.addInput("4");
+
+        int inputInt = -1;
+        try {
+            inputInt = biblioteca.getUserIntInput(0, 10);
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+
+        assertEquals(4, inputInt);
+    }
+
+    @Test
+    public void shouldWarnOfInvalidIntSelection() {
+        TestSpecificOutputStream out = new TestSpecificOutputStream();
+        TestSpecificInputStream in = new TestSpecificInputStream();
+        Biblioteca biblioteca = new Biblioteca(in, out);
+
+        in.addInput("11");
+        in.addInput("2");
+
+        int inputInt = -1;
+        try {
+            inputInt = biblioteca.getUserIntInput(0, 10);
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+
+        List<String> expectedOutput = new ArrayList<String>();
+        expectedOutput.add("Select a valid option!!");
+
+        assertEquals(expectedOutput, out.getOutput());
+
+    }
+
 
 
 }
