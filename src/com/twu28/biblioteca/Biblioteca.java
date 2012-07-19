@@ -63,4 +63,20 @@ public class Biblioteca {
         }
 
     }
+
+    public void displayReserveMenu(List<Book> books) {
+        out.println("Please select a book to reserve:");
+        for(int i = 0; i < books.size(); i++) {
+            out.println("[" + (i+1) + "] " + books.get(i).getTitle() + " by " + books.get(i).getAuthor());
+        }
+    }
+
+    public void reserveBook(Book book) {
+        if(book.isReserved()) {
+            out.println("Sorry we don't have that book yet.");
+        } else {
+            book.setReserved(true);
+            out.println("Thank You! Enjoy the book.");
+        }
+    }
 }
