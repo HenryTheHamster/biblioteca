@@ -90,11 +90,14 @@ public class BibliotecaTests {
         Biblioteca biblioteca = new Biblioteca(in, out);
 
         in.addInput("11");
+        in.addInput("");
         in.addInput("2");
+
 
         int inputInt = -1;
         try {
             inputInt = biblioteca.getUserIntInput(0, 10);
+
         } catch(IOException e) {
             e.printStackTrace();
         }

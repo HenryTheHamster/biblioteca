@@ -52,39 +52,23 @@ public class Biblioteca {
                     return inputInt;
                 } else {
                     out.println("Select a valid option!!");
+                    awaitUserConfirmation();
                 }
             } catch (NumberFormatException e) {
                 // not a valid integer
                 out.println("Select a valid option!!");
+                awaitUserConfirmation();
             }
         }
     }
 
 
-/*
-    public void performMainMenuAction(int selection) {
-        switch (selection) {
-            case 1:
-
-                break;
-            case 2:
-
-                break;
-            case 3:
-
-                break;
-            case 4:
-
-                break;
-        }
-    }
-  */
     public void displayBookList(List<Book> books) {
 
         for(Book b : books) {
             out.println(b.getTitle() + " by " + b.getAuthor());
         }
-
+        awaitUserConfirmation();
     }
 
     public void displayReserveMenu(List<Book> books) {
@@ -98,22 +82,33 @@ public class Biblioteca {
             int selection = getUserIntInput(1, books.size());
             reserveBook(books.get(selection - 1));
         } catch (IOException e) {
-
+            e.printStackTrace();
         }
 
+    }
+
+    public void awaitUserConfirmation() {
+        try {
+            in.readLine();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void reserveBook(Book book) {
         if(book.isReserved()) {
             out.println("Sorry we don't have that book yet.");
+            awaitUserConfirmation();
         } else {
             book.setReserved(true);
             out.println("Thank You! Enjoy the book.");
+            awaitUserConfirmation();
         }
     }
 
     public void displayLibraryNumberMessage() {
         out.println("Please talk to Librarian. Thank you.");
+        awaitUserConfirmation();
     }
 
 
