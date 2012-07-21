@@ -16,10 +16,6 @@ public class Biblioteca {
 
     private CustomInputStream in;
     private CustomOutputStream out;
-    private String[] mainMenuOptions = {"List all books",
-                                        "Reserve a book",
-                                        "Check library number",
-                                        "Exit"};
 
 
     public Biblioteca(CustomInputStream in, CustomOutputStream out) {
@@ -31,10 +27,18 @@ public class Biblioteca {
         out.println("Welcome to the Bangalore Library Biblioteca System!");
     }
 
-    public void displayMainMenu() {
+    public int displayMainMenu(List<String> menuOptions) {
         out.println("Please select from the following options:");
-        for(int i = 0; i < mainMenuOptions.length; i++) {
-            out.println("[" + (i+1) + "] " + mainMenuOptions[i]);
+
+        for(int i = 0; i < menuOptions.size(); i++) {
+            out.println("[" + (i+1) + "] " + menuOptions.get(i));
+        }
+
+        try {
+            return getUserIntInput(1, menuOptions.size());
+        } catch(IOException e) {
+            e.printStackTrace();
+            return -1; // return default invalid value
         }
     }
 
@@ -56,7 +60,26 @@ public class Biblioteca {
         }
     }
 
-    public void displayBookMenu(List<Book> books) {
+
+/*
+    public void performMainMenuAction(int selection) {
+        switch (selection) {
+            case 1:
+
+                break;
+            case 2:
+
+                break;
+            case 3:
+
+                break;
+            case 4:
+
+                break;
+        }
+    }
+  */
+    public void displayBookList(List<Book> books) {
 
         for(Book b : books) {
             out.println(b.getTitle() + " by " + b.getAuthor());
@@ -65,10 +88,19 @@ public class Biblioteca {
     }
 
     public void displayReserveMenu(List<Book> books) {
+
         out.println("Please select a book to reserve:");
         for(int i = 0; i < books.size(); i++) {
             out.println("[" + (i+1) + "] " + books.get(i).getTitle() + " by " + books.get(i).getAuthor());
         }
+
+        try {
+            int selection = getUserIntInput(1, books.size());
+            reserveBook(books.get(selection - 1));
+        } catch (IOException e) {
+
+        }
+
     }
 
     public void reserveBook(Book book) {
@@ -79,4 +111,10 @@ public class Biblioteca {
             out.println("Thank You! Enjoy the book.");
         }
     }
+
+    public void displayLibraryNumberMessage() {
+        out.println("Please talk to Librarian. Thank you.");
+    }
+
+
 }

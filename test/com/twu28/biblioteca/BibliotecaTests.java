@@ -44,7 +44,16 @@ public class BibliotecaTests {
         TestSpecificInputStream in = new TestSpecificInputStream();
         Biblioteca biblioteca = new Biblioteca(in, out);
 
-        biblioteca.displayMainMenu();
+        List<String> menuOptions = new ArrayList<String>();
+        menuOptions.add("List all books");
+        menuOptions.add("Reserve a book");
+        menuOptions.add("Check library number");
+        menuOptions.add("Exit");
+
+
+        in.addInput("4");
+        biblioteca.displayMainMenu(menuOptions);
+
 
         List<String> expectedOutput = new ArrayList<String>();
         expectedOutput.add("Please select from the following options:");
@@ -107,7 +116,7 @@ public class BibliotecaTests {
         books.add(new Book("The Agile Samurai", "Jonathan Rasmusson"));
         books.add(new Book("Head First Java", "Kathy Sierra and Bert Bates"));
 
-        biblioteca.displayBookMenu(books);
+        biblioteca.displayBookList(books);
 
         List<String> expectedOutput = new ArrayList<String>();
         expectedOutput.add("The Agile Samurai by Jonathan Rasmusson");
@@ -127,12 +136,14 @@ public class BibliotecaTests {
         books.add(new Book("The Agile Samurai", "Jonathan Rasmusson"));
         books.add(new Book("Head First Java", "Kathy Sierra and Bert Bates"));
 
+        in.addInput("1");
         biblioteca.displayReserveMenu(books);
 
         List<String> expectedOutput = new ArrayList<String>();
         expectedOutput.add("Please select a book to reserve:");
         expectedOutput.add("[1] The Agile Samurai by Jonathan Rasmusson");
         expectedOutput.add("[2] Head First Java by Kathy Sierra and Bert Bates");
+        expectedOutput.add("Thank You! Enjoy the book.");
 
         assertEquals(expectedOutput, out.getOutput());
     }
@@ -171,7 +182,19 @@ public class BibliotecaTests {
     }
 
 
+    @Test
+    public void shouldDisplayLibraryNumberMessage() {
+        TestSpecificOutputStream out = new TestSpecificOutputStream();
+        TestSpecificInputStream in = new TestSpecificInputStream();
+        Biblioteca biblioteca = new Biblioteca(in, out);
 
+        biblioteca.displayLibraryNumberMessage();
+
+        List<String> expectedOutput = new ArrayList<String>();
+        expectedOutput.add("Please talk to Librarian. Thank you.");
+
+        assertEquals(expectedOutput, out.getOutput());
+    }
 
 
 
