@@ -4,6 +4,7 @@ import com.twu28.biblioteca.io.CustomInputStream;
 import com.twu28.biblioteca.io.CustomOutputStream;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -16,15 +17,24 @@ public class Biblioteca {
 
     private CustomInputStream in;
     private CustomOutputStream out;
+    private HashMap<String, User> userHash = new HashMap<String, User>();
+    private User currentUser = null;
 
-
-    public Biblioteca(CustomInputStream in, CustomOutputStream out) {
+    public Biblioteca(CustomInputStream in, CustomOutputStream out, List<User> userList) {
         this.in = in;
         this.out = out;
+        for(User u : userList) {
+            userHash.put(u.getLibraryNumber(), u);
+        }
     }
 
     public void displayWelcomeMessage() {
         out.println("Welcome to the Bangalore Library Biblioteca System!");
+        if(currentUser != null) {
+            out.println("You are logged in as " + currentUser.getLibraryNumber());
+        } else {
+            out.println("You are not logged in.");
+        }
     }
 
     public int displayMainMenu(List<String> menuOptions) {
@@ -64,18 +74,32 @@ public class Biblioteca {
 
 
     public void displayBookList(List<Book> books) {
-
+        /*
         for(Book b : books) {
             out.println(b.getTitle() + " by " + b.getAuthor());
         }
+        */
+        out.println(String.format("%-30s", "Title") + String.format("%-30s", "Author"));
+        out.println(String.format("%-60s", "").replace(' ', '-'));
+        for(Book b : books) {
+            out.println(String.format("%-30s", b.getTitle()) + String.format("%-30s", b.getAuthor()));
+        }
+
         awaitUserConfirmation();
     }
 
     public void displayReserveMenu(List<Book> books) {
-
+        /*
         out.println("Please select a book to reserve:");
         for(int i = 0; i < books.size(); i++) {
             out.println("[" + (i+1) + "] " + books.get(i).getTitle() + " by " + books.get(i).getAuthor());
+        }
+        */
+
+        out.println("    " + String.format("%-30s", "Title") + String.format("%-30s", "Author"));
+        out.println(String.format("%-64s", "").replace(' ', '-'));
+        for(int i = 0; i < books.size(); i++) {
+            out.println("[" + (i+1) + "] " + String.format("%-30s", books.get(i).getTitle()) + String.format("%-30s", books.get(i).getAuthor()));
         }
 
         try {
@@ -107,9 +131,65 @@ public class Biblioteca {
     }
 
     public void displayLibraryNumberMessage() {
-        out.println("Please talk to Librarian. Thank you.");
+        if(currentUser != null) {
+            out.println("Your library number is " + currentUser.getLibraryNumber());
+        } else {
+            out.println("Please talk to Librarian. Thank you.");
+        }
         awaitUserConfirmation();
     }
 
 
+    public void displayMovieList(List<Movie> movies) {
+        out.println(String.format("%-50s", "Title") + String.format("%-20s", "Director") + String.format("%-11s", "Rating"));
+        out.println(String.format("%-81s", "").replace(' ', '-'));
+        for(Movie m : movies) {
+            out.println(String.format("%-50s", m.getTitle()) + String.format("%-20s", m.getDirector()) + String.format("%-11s", m.getRatingString()));
+        }
+        awaitUserConfirmation();
+    }
+
+    public void loginUser() {
+        try {
+            out.println("Please enter your library number:");
+            String libraryNumber = in.readLine();
+            if(!userHash.containsKey(libraryNumber)) {
+                out.println("There are no registered users with that library number.");
+                awaitUserConfirmation();
+                return;
+            }
+            out.println("Please enter your password:");
+            String password = in.readLine();
+            if(!userHash.get(libraryNumber).getPassword().equals(password)) {
+                out.println("Incorrect password.");
+                awaitUserConfirmation();
+                return;
+            }
+            currentUser = userHash.get(libraryNumber);
+            out.println("Login successful!");
+            awaitUserConfirmation();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    public void logoutUser() {
+        if(currentUser != null) {
+            currentUser = null;
+            out.println("You have been logged out.");
+        } else {
+            out.println("You are not logged in!");
+        }
+        awaitUserConfirmation();
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
 }
