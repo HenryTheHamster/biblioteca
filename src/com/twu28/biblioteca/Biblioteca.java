@@ -2,9 +2,14 @@ package com.twu28.biblioteca;
 
 import com.twu28.biblioteca.io.CustomInputStream;
 import com.twu28.biblioteca.io.CustomOutputStream;
+import com.twu28.biblioteca.io.DisplayHandler;
+import com.twu28.biblioteca.library.Book;
+import com.twu28.biblioteca.library.LibraryHandler;
+import com.twu28.biblioteca.library.Movie;
+import com.twu28.biblioteca.users.User;
+import com.twu28.biblioteca.users.UserHandler;
 
-import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,181 +20,85 @@ import java.util.List;
  */
 public class Biblioteca {
 
-    private CustomInputStream in;
-    private CustomOutputStream out;
-    private HashMap<String, User> userHash = new HashMap<String, User>();
-    private User currentUser = null;
+    private static final Book[] standardBookList = {new Book("The Agile Samurai", "Jonathan Rasmusson"),
+                                                    new Book("Head First Java", "Kathy Sierra and Bert Bates")};
 
-    public Biblioteca(CustomInputStream in, CustomOutputStream out, List<User> userList) {
-        this.in = in;
-        this.out = out;
-        for(User u : userList) {
-            userHash.put(u.getLibraryNumber(), u);
-        }
+    private static final Movie[] standardMovieList = {new Movie("Underworld Awakening", "Mans Marlind and Bjorn Stein", 3),
+                                                      new Movie("Lock, Stock and Two Smoking Barrels", "Guy Ritchie", 9),
+                                                      new Movie("The Dark Knight Rises", "Christopher Nolan")};
+
+    private static final User[] standardUserList = {new User("111-1111", "librarian"),
+                                                    new User("111-1112", "andrew")};
+
+
+    private DisplayHandler display;
+    private LibraryHandler bookLibrary;
+    private LibraryHandler movieLibrary;
+    private UserHandler userSystem;
+
+    public Biblioteca(CustomInputStream in, CustomOutputStream out) {
+
+        this.display = new DisplayHandler(in, out);
+
+        bookLibrary = new LibraryHandler(display, standardBookList);
+        movieLibrary = new LibraryHandler(display, standardMovieList);
+        userSystem = new UserHandler(display, standardUserList);
+
     }
 
     public void displayWelcomeMessage() {
-        out.println("Welcome to the Bangalore Library Biblioteca System!");
-        if(currentUser != null) {
-            out.println("You are logged in as " + currentUser.getLibraryNumber());
-        } else {
-            out.println("You are not logged in.");
-        }
+        display.displayMessage("Welcome to the Bangalore Library Biblioteca System!");
     }
 
-    public int displayMainMenu(List<String> menuOptions) {
-        out.println("Please select from the following options:");
+    public void displayMainMenu() {
 
-        for(int i = 0; i < menuOptions.size(); i++) {
-            out.println("[" + (i+1) + "] " + menuOptions.get(i));
-        }
 
-        try {
-            return getUserIntInput(1, menuOptions.size());
-        } catch(IOException e) {
-            e.printStackTrace();
-            return -1; // return default invalid value
-        }
-    }
-
-    public int getUserIntInput(int lower, int upper) throws IOException {
 
         while(true) {
-            String inputString = in.readLine();
-            try {
-                int inputInt = Integer.parseInt(inputString);
-                if(inputInt >= lower && inputInt <= upper) {
-                    return inputInt;
-                } else {
-                    out.println("Select a valid option!!");
-                    awaitUserConfirmation();
-                }
-            } catch (NumberFormatException e) {
-                // not a valid integer
-                out.println("Select a valid option!!");
-                awaitUserConfirmation();
+
+            List<String> menuOptions = new ArrayList<String>();
+            menuOptions.add("List all books");
+            menuOptions.add("Reserve a book");
+            menuOptions.add("List all movies");
+            menuOptions.add("Check library number");
+            if(userSystem.hasUserLoggedIn()) {
+                menuOptions.add("Logout");
+            } else {
+                menuOptions.add("Login");
+            }
+            menuOptions.add("Exit");
+
+            Object selectedOption = display.displayMenu("= Main Menu =", menuOptions.toArray());
+
+            int selectedIndex = menuOptions.indexOf(selectedOption);
+
+            switch (selectedIndex) {
+                case 0:
+                    bookLibrary.displayItemList();
+                    break;
+                case 1:
+                    bookLibrary.displayReserveMenu();
+                    break;
+                case 2:
+                    movieLibrary.displayItemList();
+                    break;
+                case 3:
+                    userSystem.displayLibraryNumberMessage();
+                    break;
+                case 4:
+                    if(userSystem.hasUserLoggedIn()) {
+                        userSystem.logoutUser();
+                    } else {
+                        userSystem.loginUser();
+                    }
+                    break;
+                case 5:
+                    display.displayMessage("Goodbye!");
+                    System.exit(0);
+                    break;
             }
         }
-    }
-
-
-    public void displayBookList(List<Book> books) {
-        /*
-        for(Book b : books) {
-            out.println(b.getTitle() + " by " + b.getAuthor());
-        }
-        */
-        out.println(String.format("%-30s", "Title") + String.format("%-30s", "Author"));
-        out.println(String.format("%-60s", "").replace(' ', '-'));
-        for(Book b : books) {
-            out.println(String.format("%-30s", b.getTitle()) + String.format("%-30s", b.getAuthor()));
-        }
-
-        awaitUserConfirmation();
-    }
-
-    public void displayReserveMenu(List<Book> books) {
-        /*
-        out.println("Please select a book to reserve:");
-        for(int i = 0; i < books.size(); i++) {
-            out.println("[" + (i+1) + "] " + books.get(i).getTitle() + " by " + books.get(i).getAuthor());
-        }
-        */
-
-        out.println("    " + String.format("%-30s", "Title") + String.format("%-30s", "Author"));
-        out.println(String.format("%-64s", "").replace(' ', '-'));
-        for(int i = 0; i < books.size(); i++) {
-            out.println("[" + (i+1) + "] " + String.format("%-30s", books.get(i).getTitle()) + String.format("%-30s", books.get(i).getAuthor()));
-        }
-
-        try {
-            int selection = getUserIntInput(1, books.size());
-            reserveBook(books.get(selection - 1));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 
-    public void awaitUserConfirmation() {
-        try {
-            in.readLine();
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void reserveBook(Book book) {
-        if(book.isReserved()) {
-            out.println("Sorry we don't have that book yet.");
-            awaitUserConfirmation();
-        } else {
-            book.setReserved(true);
-            out.println("Thank You! Enjoy the book.");
-            awaitUserConfirmation();
-        }
-    }
-
-    public void displayLibraryNumberMessage() {
-        if(currentUser != null) {
-            out.println("Your library number is " + currentUser.getLibraryNumber());
-        } else {
-            out.println("Please talk to Librarian. Thank you.");
-        }
-        awaitUserConfirmation();
-    }
-
-
-    public void displayMovieList(List<Movie> movies) {
-        out.println(String.format("%-50s", "Title") + String.format("%-20s", "Director") + String.format("%-11s", "Rating"));
-        out.println(String.format("%-81s", "").replace(' ', '-'));
-        for(Movie m : movies) {
-            out.println(String.format("%-50s", m.getTitle()) + String.format("%-20s", m.getDirector()) + String.format("%-11s", m.getRatingString()));
-        }
-        awaitUserConfirmation();
-    }
-
-    public void loginUser() {
-        try {
-            out.println("Please enter your library number:");
-            String libraryNumber = in.readLine();
-            if(!userHash.containsKey(libraryNumber)) {
-                out.println("There are no registered users with that library number.");
-                awaitUserConfirmation();
-                return;
-            }
-            out.println("Please enter your password:");
-            String password = in.readLine();
-            if(!userHash.get(libraryNumber).getPassword().equals(password)) {
-                out.println("Incorrect password.");
-                awaitUserConfirmation();
-                return;
-            }
-            currentUser = userHash.get(libraryNumber);
-            out.println("Login successful!");
-            awaitUserConfirmation();
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
-    public void logoutUser() {
-        if(currentUser != null) {
-            currentUser = null;
-            out.println("You have been logged out.");
-        } else {
-            out.println("You are not logged in!");
-        }
-        awaitUserConfirmation();
-    }
-
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
-    }
 }

@@ -1,6 +1,4 @@
-package com.twu28.biblioteca;
-
-import java.util.Arrays;
+package com.twu28.biblioteca.library;
 
 /**
  * Created with IntelliJ IDEA.
@@ -8,7 +6,7 @@ import java.util.Arrays;
  * Date: 21/07/12
  * Time: 9:33 PM
  */
-public class Movie {
+public class Movie extends LibraryItem {
 
     private String title;
     private String director;
@@ -37,13 +35,15 @@ public class Movie {
         return rating;
     }
 
+    public String toString() {
+        return title + ", directed by " + director + " " + getRatingString();
+    }
+
     public String getRatingString() {
         if(rating != null) {
-            char[] stars = new char[rating];
-            Arrays.fill(stars, '*');
-            return new String(stars);
+            return "(" + rating + "/10)";
         } else {
-            return "N/A";
+            return "(N/A)";
         }
     }
 }
