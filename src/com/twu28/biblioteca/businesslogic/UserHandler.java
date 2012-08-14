@@ -1,6 +1,7 @@
-package com.twu28.biblioteca.users;
+package com.twu28.biblioteca.businesslogic;
 
-import com.twu28.biblioteca.io.DisplayHandler;
+import com.twu28.biblioteca.persistence.User;
+import com.twu28.biblioteca.presentation.DisplayHandler;
 
 import java.util.HashMap;
 import java.util.Map;

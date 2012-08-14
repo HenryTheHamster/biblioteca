@@ -1,8 +1,10 @@
-package com.twu28.biblioteca.users;
+package com.twu28.biblioteca.businesslogic;
 
-import com.twu28.biblioteca.io.DisplayHandler;
-import com.twu28.biblioteca.io.TestSpecificInputStream;
-import com.twu28.biblioteca.io.TestSpecificOutputStream;
+import com.twu28.biblioteca.businesslogic.UserHandler;
+import com.twu28.biblioteca.persistence.User;
+import com.twu28.biblioteca.presentation.DisplayHandler;
+import com.twu28.biblioteca.presentation.TestSpecificInputStream;
+import com.twu28.biblioteca.presentation.TestSpecificOutputStream;
 import org.junit.Test;
 
 import java.util.ArrayList;

@@ -1,5 +1,6 @@
-package com.twu28.biblioteca.users;
+package com.twu28.biblioteca.persistence;
 
+import com.twu28.biblioteca.persistence.User;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;

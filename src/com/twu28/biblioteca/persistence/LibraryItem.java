@@ -1,4 +1,4 @@
-package com.twu28.biblioteca.library;
+package com.twu28.biblioteca.persistence;
 
 /**
  * Created with IntelliJ IDEA.

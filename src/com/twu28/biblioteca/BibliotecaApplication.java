@@ -1,9 +1,10 @@
 package com.twu28.biblioteca;
 
-import com.twu28.biblioteca.io.CustomInputStream;
-import com.twu28.biblioteca.io.CustomOutputStream;
-import com.twu28.biblioteca.io.SystemConsoleInputStream;
-import com.twu28.biblioteca.io.SystemConsoleOutputStream;
+import com.twu28.biblioteca.presentation.Biblioteca;
+import com.twu28.biblioteca.presentation.CustomInputStream;
+import com.twu28.biblioteca.presentation.CustomOutputStream;
+import com.twu28.biblioteca.presentation.SystemConsoleInputStream;
+import com.twu28.biblioteca.presentation.SystemConsoleOutputStream;
 
 /**
  * Created with IntelliJ IDEA.

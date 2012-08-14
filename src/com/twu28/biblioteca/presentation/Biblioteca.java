@@ -1,13 +1,10 @@
-package com.twu28.biblioteca;
+package com.twu28.biblioteca.presentation;
 
-import com.twu28.biblioteca.io.CustomInputStream;
-import com.twu28.biblioteca.io.CustomOutputStream;
-import com.twu28.biblioteca.io.DisplayHandler;
-import com.twu28.biblioteca.library.Book;
-import com.twu28.biblioteca.library.LibraryHandler;
-import com.twu28.biblioteca.library.Movie;
-import com.twu28.biblioteca.users.User;
-import com.twu28.biblioteca.users.UserHandler;
+import com.twu28.biblioteca.persistence.Book;
+import com.twu28.biblioteca.businesslogic.LibraryHandler;
+import com.twu28.biblioteca.persistence.Movie;
+import com.twu28.biblioteca.persistence.User;
+import com.twu28.biblioteca.businesslogic.UserHandler;
 
 import java.util.ArrayList;
 import java.util.List;

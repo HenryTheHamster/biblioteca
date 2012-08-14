@@ -1,4 +1,6 @@
-package com.twu28.biblioteca.io;
+package com.twu28.biblioteca.presentation;
+
+import com.twu28.biblioteca.presentation.CustomInputStream;
 
 import java.util.LinkedList;
 import java.util.Queue;
